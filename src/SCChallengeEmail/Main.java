@@ -33,7 +33,7 @@ public class Main {
             try {
                 String input = GetInput();
 
-                if(input == "QUIT") {
+                if(input.equals("QUIT")) {
                     break;
                 }
 
