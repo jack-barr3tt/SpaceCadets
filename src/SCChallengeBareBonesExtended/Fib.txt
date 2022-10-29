@@ -1,0 +1,29 @@
+// Let i be the number of fib numbers to calculate
+clear i;
+set i 12;
+
+// Decrement i by 1 because there is a lag of 1
+decr i;
+
+// Let c be the iteration counter
+clear c;
+// Let o be the final number
+clear o;
+// Let p1 be the previous number
+clear p1;
+// Let p2 be the previous number to p1
+clear p2;
+
+// The first two numbers of fibonacci are 0 and 1
+set p1 1;
+set p2 0;
+
+while c lt i;
+    // Output is the sum of the two previous
+    add o p1 p2;
+    // Update the two previous variables
+    set p2 p1;
+    set p1 o;
+    // Increment counter
+    add c c 1;
+end;

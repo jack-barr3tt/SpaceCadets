@@ -1,0 +1,15 @@
+clear a;
+clear b;
+// a and b are the two input values
+set a 8;
+set b 12;
+
+while a not b do;
+    if a gt b then;
+        subtract a a b;
+    else;
+        subtract b b a;
+    end;
+end;
+
+// a contains the output
