@@ -79,7 +79,7 @@ public class Interpreter {
           if (!condition(parts[1],parts[2],parts[3])) {
             reader.endBlock();
           }
-          Interpreter ifBlock = new Interpreter(reader,memory);
+          new Interpreter(reader,memory);
           break;
         case "else":
         case "end":

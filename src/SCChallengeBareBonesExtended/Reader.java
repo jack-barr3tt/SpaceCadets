@@ -30,58 +30,67 @@ public class Reader {
 
   private String readFromFile() throws IOException {
     String temp = "";
+    char next = 0, prev = 0;
     while (true) {
-      int next = this.fileReader.read();
+      int nextInt = this.fileReader.read();
 
-      if (next == -1) {
+      if (nextInt == -1) {
         if (temp == "") {
           throw new IOException("End of file");
         } else {
           break;
         }
       }
+      prev = next;
+      next = (char) nextInt;
 
-      if (temp.endsWith("/")) {
-        if ((char) next == '/') {
+      System.out.println(prev + " " + next);
+
+      // Start comments
+      if(prev == '/') {
+        if(next == '/') {
           currentCommentState = CommentState.Line;
         }
 
-        if ((char) next == '*') {
-          if (currentCommentState == CommentState.None) {
-            currentCommentState = CommentState.Fragment;
-          }
+        if(next == '*') {
+          currentCommentState = CommentState.Fragment;
         }
 
-        temp = temp.substring(0, temp.length() - 1);
-      }
-
-      if ((char) next == '/' && temp.endsWith("*")) {
-        if (currentCommentState == CommentState.Fragment) {
-          currentCommentState = CommentState.None;
+        if(next == '/' || next == '*') {
           temp = temp.substring(0, temp.length() - 1);
-          continue;
         }
       }
 
-      if ((char) next == ';' || temp.endsWith("do") || temp.endsWith("then")) {
-        break;
+      // End fragment comments
+      if(prev == '*' && next == '/') {
+        currentCommentState = CommentState.None;
+        continue;
       }
 
-      if ((char) next == '\n') {
+      // If we hit a newline we need to check if a line comment is being made
+      if (next == '\n') {
         if (currentCommentState == CommentState.Line) currentCommentState = CommentState.None;
         continue;
       }
 
-      if (temp == "" && (char) next == ' ') {
+      // If a comment is being made we don't need to go further
+      if (currentCommentState != CommentState.None) {
         continue;
       }
 
-      if (currentCommentState != CommentState.None && ((char) next) != '*') {
+      // Ignore space
+      if (temp == "" && next == ' ') {
         continue;
       }
 
-      temp += (char) next;
+      // When a semicolon is reached we can stop looking for more characters
+      if (next == ';') {
+        break;
+      }
+
+      temp += next;
     }
+    System.out.println(temp.length());
     return temp;
   }
 
